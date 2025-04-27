@@ -7,10 +7,6 @@
 
 import Foundation
 
-private func ~= (pattern: Regex<Substring>, value: Substring) -> Bool {
-    return value.prefixMatch(of: pattern) != nil
-}
-
 struct TokenSequence: Sequence {
     let source: String
     
@@ -19,8 +15,7 @@ struct TokenSequence: Sequence {
     }
 }
 
-
-struct TokenIterator: IteratorProtocol {
+nonisolated struct TokenIterator: IteratorProtocol {
     typealias Element = Token
     
     let source: String
@@ -76,13 +71,15 @@ extension TokenIterator {
         
         // Read accidental, if present
         let accidental = switch peek() {
-        case "b", "#": NoteAccidental(rawValue: advance())
-        default: NoteAccidental?.none
+        case "b", "#": advance()
+        default: Character?.none
         }
         
         // Read octave number & return
         let octave = advance().wholeNumberValue!
-        return .noteLiteral(letter, accidental, octave)
+        let note = Note(letter: letter, accidental: accidental, octave: octave)!
+        
+        return .noteLiteral(note)
     }
     
     private mutating func lexDoubleLiteral() -> Token {
@@ -125,4 +122,8 @@ extension TokenIterator {
         advance()
         return token
     }
+}
+
+private func ~= (pattern: Regex<Substring>, value: Substring) -> Bool {
+    return value.prefixMatch(of: pattern) != nil
 }

@@ -7,12 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8776DB2F2DBD71CB00514768 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8776DB2B2DBD71CB00514768 /* Assets.xcassets */; };
-		8776DB302DBD71CB00514768 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8776DB2C2DBD71CB00514768 /* ContentView.swift */; };
-		8776DB312DBD71CB00514768 /* NewMusicCodeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8776DB2D2DBD71CB00514768 /* NewMusicCodeApp.swift */; };
 		8776DB372DBD73EF00514768 /* Runestone in Frameworks */ = {isa = PBXBuildFile; productRef = 8776DB362DBD73EF00514768 /* Runestone */; };
 		8776DB3A2DBD740300514768 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 8776DB392DBD740300514768 /* Collections */; };
 		8776DB3C2DBD740300514768 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 8776DB3B2DBD740300514768 /* DequeModule */; };
+		87E503F32DBE0B53005AA3B1 /* Parser in Frameworks */ = {isa = PBXBuildFile; productRef = 87E503F22DBE0B53005AA3B1 /* Parser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,9 +26,6 @@
 /* Begin PBXFileReference section */
 		8776DB002DBD71AC00514768 /* NewMusicCode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewMusicCode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8776DB0D2DBD71AD00514768 /* NewMusicCodeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NewMusicCodeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8776DB2B2DBD71CB00514768 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		8776DB2C2DBD71CB00514768 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		8776DB2D2DBD71CB00514768 /* NewMusicCodeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMusicCodeApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -39,9 +34,9 @@
 			path = NewMusicCodeTests;
 			sourceTree = "<group>";
 		};
-		8776DB322DBD71D500514768 /* Parser */ = {
+		87E503B62DBDF648005AA3B1 /* NewMusicCode */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Parser;
+			path = NewMusicCode;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -54,6 +49,7 @@
 				8776DB3A2DBD740300514768 /* Collections in Frameworks */,
 				8776DB372DBD73EF00514768 /* Runestone in Frameworks */,
 				8776DB3C2DBD740300514768 /* DequeModule in Frameworks */,
+				87E503F32DBE0B53005AA3B1 /* Parser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +66,7 @@
 		8776DAF72DBD71AC00514768 = {
 			isa = PBXGroup;
 			children = (
-				8776DB2E2DBD71CB00514768 /* NewMusicCode */,
+				87E503B62DBDF648005AA3B1 /* NewMusicCode */,
 				8776DB102DBD71AD00514768 /* NewMusicCodeTests */,
 				8776DB012DBD71AC00514768 /* Products */,
 			);
@@ -83,17 +79,6 @@
 				8776DB0D2DBD71AD00514768 /* NewMusicCodeTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		8776DB2E2DBD71CB00514768 /* NewMusicCode */ = {
-			isa = PBXGroup;
-			children = (
-				8776DB2B2DBD71CB00514768 /* Assets.xcassets */,
-				8776DB2C2DBD71CB00514768 /* ContentView.swift */,
-				8776DB2D2DBD71CB00514768 /* NewMusicCodeApp.swift */,
-				8776DB322DBD71D500514768 /* Parser */,
-			);
-			path = NewMusicCode;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,13 +97,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				8776DB322DBD71D500514768 /* Parser */,
+				87E503B62DBDF648005AA3B1 /* NewMusicCode */,
 			);
 			name = NewMusicCode;
 			packageProductDependencies = (
 				8776DB362DBD73EF00514768 /* Runestone */,
 				8776DB392DBD740300514768 /* Collections */,
 				8776DB3B2DBD740300514768 /* DequeModule */,
+				87E503F22DBE0B53005AA3B1 /* Parser */,
 			);
 			productName = NewMusicCode;
 			productReference = 8776DB002DBD71AC00514768 /* NewMusicCode.app */;
@@ -178,6 +164,7 @@
 			packageReferences = (
 				8776DB352DBD73EF00514768 /* XCRemoteSwiftPackageReference "Runestone" */,
 				8776DB382DBD740300514768 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				87E503F12DBE0B53005AA3B1 /* XCLocalSwiftPackageReference "Packages/Parser" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8776DB012DBD71AC00514768 /* Products */;
@@ -195,7 +182,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8776DB2F2DBD71CB00514768 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,8 +199,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8776DB302DBD71CB00514768 /* ContentView.swift in Sources */,
-				8776DB312DBD71CB00514768 /* NewMusicCodeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +281,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -353,6 +338,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -380,7 +366,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.samuelshi.NewMusicCode;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_GLOBAL_ACTOR_ISOLATED_TYPES_USABILITY = NO;
+				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = NO;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = NO;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -408,7 +398,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.samuelshi.NewMusicCode;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_GLOBAL_ACTOR_ISOLATED_TYPES_USABILITY = NO;
+				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = NO;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = NO;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -483,6 +477,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		87E503F12DBE0B53005AA3B1 /* XCLocalSwiftPackageReference "Packages/Parser" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Parser;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		8776DB352DBD73EF00514768 /* XCRemoteSwiftPackageReference "Runestone" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -517,6 +518,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8776DB382DBD740300514768 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = DequeModule;
+		};
+		87E503F22DBE0B53005AA3B1 /* Parser */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Parser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

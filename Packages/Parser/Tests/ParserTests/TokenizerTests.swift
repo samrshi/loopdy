@@ -7,16 +7,16 @@
 
 import Foundation
 import Testing
-@testable import NewMusicCode
+@testable import Parser
 
 @Test(arguments: [
-    ("A", NoteAccidental.flat, 4),
-    ("B", nil, 2),
+    Note(letter: .a, accidental: .flat, octave: 4),
+    Note(letter: .b, octave: 2)
 ])
 func testNoteLiteral(
-    details: (Character, NoteAccidental?, Int)
+    note: Note
 ) {
-    let note = Token.noteLiteral(details.0, details.1, details.2)
+    let note = Token.noteLiteral(note)
     var iterator = TokenIterator(source: note.text)
     
     #expect(iterator.next() == note)
