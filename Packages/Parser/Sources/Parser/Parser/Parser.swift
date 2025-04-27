@@ -19,20 +19,44 @@ struct Parser {
 }
 
 extension Parser {
+    mutating func parseFunctionCallList() throws (ParseError) -> FunctionCallListSyntax {
+        // functionCallList ::= [whitespace] functionCall [whitespace] [functionCallList]
+        try parseWhitespace()
+        let functionCall = try parseFunctionCall()
+        try parseWhitespace()
+        let next = checkFunctionCallList() ? try parseFunctionCallList() : nil
+        return FunctionCallListSyntax(functionCall: functionCall, next: next)
+    }
+    
     mutating func parseFunctionCall() throws(ParseError) -> FunctionCallSyntax {
-        // functionCall ::= identifier "(" [labeled-argument] ")"
+        // functionCall ::= identifier "(" [labeled-argument] ")" [{ whitespace [functionCallList] whitespace }]
         let name = try parseIdentifier()
         try consume(.openParen)
         try parseWhitespace()
-        
-        let argument: LabeledValueSyntax? = switch peek() {
-        case .identifier: try parseLabeledArgument()
-        default: nil
-        }
-        
+        let argument = checkIdentifier() ? try parseLabeledArgument() : nil
         try parseWhitespace()
         try consume(.closeParen)
-        return FunctionCallSyntax(name: name, argument: argument)
+        try parseWhitespace()
+        
+        var trailingList: FunctionCallListSyntax? = nil
+        
+        if peek()?.kind == .openCurly {
+            try consume(.openCurly)
+            try parseWhitespace()
+            
+            if checkFunctionCallList() {
+                trailingList = try parseFunctionCallList()
+            }
+            
+            try parseWhitespace()
+            try consume(.closeCurly)
+        }
+        
+        return FunctionCallSyntax(
+            name: name,
+            argument: argument,
+            trailingList: trailingList
+        )
     }
     
     mutating func parseLabeledArgument() throws(ParseError) -> LabeledValueSyntax {
@@ -51,11 +75,11 @@ extension Parser {
         if case .identifier(let name) = token {
             return IdentifierSyntax(name: name)
         } else {
-            throw ParseError(reason: "Failed to parse idenfier (found: \(token)")
+            throw ParseError(reason: "Failed to parse idenfier (found: \(token))")
         }
     }
     
-    mutating func parseExpression() throws(ParseError) -> ExpressionSyntax {
+    mutating func parseExpression() throws(ParseError) -> any ExpressionSyntax {
         // expression ::= integerLiteral | doubleLiteral | boolLiteral | noteLiteral
         let token = try consume()
         
@@ -93,16 +117,39 @@ extension Parser {
         }
         
         guard token.kind == kind else {
-            throw ParseError(reason: "Incorrect token kind. (\(token) != \(kind)")
+            throw ParseError(reason: "Incorrect token kind. (\(token) != \(kind))")
         }
         
         return token
     }
+    
+    @discardableResult
+    mutating func consume(while kind: TokenKind) throws(ParseError) -> [Token] {
+        var result: [Token] = []
+        
+        while peek()?.kind == kind {
+            result.append(try consume())
+        }
+        
+        return result
+    }
 }
  
 extension Parser {
-    mutating func peek() -> Token? {
+    func peek() -> Token? {
         tokens.first
+    }
+    
+    func checkIdentifier() -> Bool {
+        peek()?.kind == .identifier
+    }
+    
+    func checkFunctionCallList() -> Bool {
+        checkFunctionCall()
+    }
+    
+    func checkFunctionCall() -> Bool {
+        peek()?.kind == .identifier
     }
 }
 

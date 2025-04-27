@@ -8,74 +8,119 @@
 import SwiftUI
 @testable import Parser
 
+struct FunctionCallView: View {
+    @State private var expanded = true
+    let functionCall: FunctionCallSyntax
+    
+    var body: some View {
+        if let trailingList = functionCall.trailingList {
+            DisclosureGroup("\(functionCall.name)", isExpanded: $expanded) {
+                ForEach(trailingList.list, id: \.description) {
+                    FunctionCallView(functionCall: $0)
+                }
+            }
+        } else {
+            Text("\(functionCall)")
+        }
+    }
+}
+
 struct ContentView: View {
-    @State private var fileName: String = "rock-drums.song"
-    @State private var functionCall: FunctionCallSyntax? = nil
+    @State private var bpm = 120.0
+    
+    @State private var sounds: [Sound] = []
     @State private var errorMessage: String? = nil
     
+    @State private var currentTask: Task<Void, Never>? = nil
+    
     @State private var code: String = """
+    Repeat(count: 4) {
+        kick()
+        hihat(open: false)
+        snare()
+    
+        Subdivide(by: 0.5) {
+            hihat(open: false)
+            hihat(open: true)
+        }
+    }
     """
     
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    CodeEditor(code: $code)
-                        .frame(height: 250)
-                } footer: {
-                    if let errorMessage {
-                        Text(errorMessage)
-                            .font(.footnote)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.red)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 12)
-                            .background(.red.opacity(0.15), in: .rect(cornerRadius: 8))
-                            .listRowInsets(EdgeInsets())
-                            .padding(.top, 8)
-                    }
-                }
+            ZStack(alignment: .bottom) {
+                CodeEditor(code: $code)
                 
                 if let errorMessage {
-                    Section("Error") {
-                        Text("🛑 \(errorMessage)")
-                            .fontDesign(.monospaced)
-                            .font(.footnote)
-                    }
-                }
-                
-                if let functionCall {
-                    Section("Function") {
-                        Text("\(functionCall)")
-                    }
+                    Text(errorMessage)
+                        .font(.footnote)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.red)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .background(.red.opacity(0.15), in: .rect(cornerRadius: 8))
+                        .padding()
+                        .transition(
+                            .move(edge: .bottom)
+                                .combined(with: .offset(x: 0, y: 15))
+                                .combined(with: .scale(0.8))
+                        )
+                        .zIndex(1)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle($fileName)
+            .navigationTitle("Music Editor")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        // play
+                        if let current = currentTask {
+                            current.cancel()
+                            currentTask = nil
+                        } else {
+                            currentTask = Task.detached {
+                                let context = await SoundContext(bpm: bpm)
+                                
+                                for sound in await sounds {
+                                    try? await sound.play(in: context)
+                                }
+                                
+                                await stop()
+                            }
+                        }
                     } label: {
-                        Label("Play", systemImage: "play.fill")
+                        if currentTask != nil {
+                            Label("Pause", systemImage: "pause.fill")
+                        } else {
+                            Label("Play", systemImage: "play.fill")
+                        }
                     }
-                }
-                    
-                ToolbarItem(placement: .bottomBar) {
-                    Button("Hi") {}
+                    .disabled(sounds.isEmpty)
                 }
             }
             .onChange(of: code, initial: true) {
                 do {
+                    stop()
+                    
                     var parser = Parser(source: code)
-                    functionCall = try parser.parseFunctionCall()
-                    errorMessage = nil
+                    let functionCalls = try parser.parseFunctionCallList()
+                        
+                    self.sounds = functionCalls.list.compactMap { $0.sound }
+                        
+                    if errorMessage != nil {
+                        withAnimation { self.errorMessage = nil }
+                    }
                 } catch {
-                    errorMessage = error.localizedDescription
+                    sounds = []
+                    withAnimation { errorMessage = error.localizedDescription }
                 }
             }
         }
+    }
+    
+    func stop() {
+        currentTask?.cancel()
+        currentTask = nil
     }
 }
 

@@ -30,13 +30,59 @@ extension Syntax {
 
 // MARK: Function Calls
 
+/// Syntax for multiple function calls
+class FunctionCallListSyntax: Syntax {
+    let functionCall: FunctionCallSyntax
+    let next: FunctionCallListSyntax?
+    
+    init(functionCall: FunctionCallSyntax, next: FunctionCallListSyntax?) {
+        self.functionCall = functionCall
+        self.next = next
+    }
+    
+    var list: [FunctionCallSyntax] {
+        var result = [functionCall]
+        var next = next
+        
+        while let current = next {
+            result.append(current.functionCall)
+            next = current.next
+        }
+        
+        return result
+    }
+    
+    var description: String {
+        var result = "\(functionCall)"
+        
+        if let next {
+            result += "\n\(next)"
+        }
+        
+        return result
+    }
+    
+    static func == (lhs: FunctionCallListSyntax, rhs: FunctionCallListSyntax) -> Bool {
+        lhs.functionCall == rhs.functionCall && lhs.next == rhs.next
+    }
+}
+
 /// Syntax for a functional call expression.
 /// Example: `Repeat(count: 4, subdivision: 0.5)`
 struct FunctionCallSyntax: Syntax {
     let name: IdentifierSyntax
     let argument: LabeledValueSyntax?
+    var trailingList: FunctionCallListSyntax? = nil
     
-    var description: String { "\(name)(\(argument.map { $0.description } ?? ""))"}
+    var description: String {
+        var result = "\(name)("
+        
+        if let argument { result += "\(argument)" }
+        result += ")"
+        
+        if let trailingList { result += " {\n    \(trailingList)\n}" }
+        return result
+    }
 }
 
 /// Syntax for a list of labeled values

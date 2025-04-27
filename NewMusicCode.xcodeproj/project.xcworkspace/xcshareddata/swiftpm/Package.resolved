@@ -1,6 +1,15 @@
 {
-  "originHash" : "6c11650bb47884416900024531fc583213be2cbf50c7b88eac95f28a43ed5c81",
+  "originHash" : "e2ac48852508c21f150c82182bc0812e3615daf2b0ce6b1cd8d70d30552af764",
   "pins" : [
+    {
+      "identity" : "audiokit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AudioKit/AudioKit.git",
+      "state" : {
+        "revision" : "5b3fd238ef8ee95c9842ca4ea83ca58ee151e630",
+        "version" : "5.6.5"
+      }
+    },
     {
       "identity" : "runestone",
       "kind" : "remoteSourceControl",

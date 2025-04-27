@@ -33,3 +33,58 @@ func functionCallSingleArg() async throws {
     
     #expect(actual == expected)
 }
+
+@Test
+func functionCallWithList() async throws {
+    var parser = Parser(source: """
+    Repeat(count: 4) {
+        kick()
+        snare()
+    }
+    """)
+    
+    let actual = try parser.parseFunctionCall()
+    let expected = FunctionCallSyntax(
+        name: "Repeat",
+        argument: LabeledValueSyntax(
+            label: "count",
+            value: IntegerExpressionSyntax(value: 4)
+        ),
+        trailingList: FunctionCallListSyntax(
+            functionCall: .init(name: "kick", argument: nil),
+            next: FunctionCallListSyntax(
+                functionCall: .init(name: "snare", argument: nil),
+                next: nil
+            )
+        )
+    )
+    
+    #expect(actual == expected)
+}
+
+@Test
+func functionCallList() async throws {
+    var parser = Parser(source: """
+    kick()
+    snare()
+    kick()
+    snare()
+    """)
+    
+    let actual = try parser.parseFunctionCallList()
+    let expected = FunctionCallListSyntax(
+        functionCall: .init(name: "kick", argument: nil),
+        next: FunctionCallListSyntax(
+            functionCall: .init(name: "snare", argument: nil),
+            next: FunctionCallListSyntax(
+                functionCall: .init(name: "kick", argument: nil),
+                next: FunctionCallListSyntax(
+                    functionCall: .init(name: "snare", argument: nil),
+                    next: nil
+                )
+            )
+        )
+    )
+    
+    #expect(actual == expected)
+}
